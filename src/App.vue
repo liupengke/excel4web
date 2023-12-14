@@ -1,30 +1,84 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted, ref } from "vue";
+import Excel from "../lib";
+import mockData from "./data";
+
+const editor = ref(null);
+const columns = [
+	{
+		title: "skuid",
+		width: 200,
+		dataIndex: "skuid",
+		editable: false,
+	},
+	{
+		type: "search",
+		width: 40,
+	},
+	{
+		title: "商品名称",
+		dataIndex: "goods_name",
+		width: {
+			flex: 1.5,
+			min: 300,
+			max: 500,
+		},
+	},
+	{
+		title: "商品名(英文)",
+		dataIndex: "goods_name_en",
+		width: {
+			flex: 1.5,
+			min: 300,
+			max: 500,
+		},
+	},
+	{
+		title: "规格型号",
+		dataIndex: "model",
+		width: {
+			flex: 1,
+			min: 200,
+			max: 400,
+		},
+	},
+	{
+		title: "净重",
+		dataIndex: "net_weight",
+		width: {
+			flex: 1,
+			min: 200,
+			max: 400,
+		},
+	},
+];
+onMounted(() => {
+	const excel = new Excel({
+		el: editor.value,
+		columns,
+	});
+	excel.updateRecords(mockData.data.list);
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+	<div class="playground">
+		<header class="header"></header>
+		<div class="panel" ref="editor"></div>
+	</div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.playground {
+	height: 100%;
+	display: flex;
+  flex-direction: column;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.header {
+	height: 120px;
+	background-color: #f0f0f0;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.panel {
+	flex: 1;
 }
 </style>
